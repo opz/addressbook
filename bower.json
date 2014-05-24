@@ -1,0 +1,23 @@
+{
+  "name": "addressbook",
+  "version": "0.0.0",
+  "authors": [
+    "opz <will.shahda@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "http://willshahda.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "angular": "~1.2.16",
+    "angular-route": "~1.2.16",
+    "fontawesome": "~4.1.0"
+  }
+}
