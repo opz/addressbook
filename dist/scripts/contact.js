@@ -9,5 +9,17 @@
         $scope.last = response.data.last;
         $scope.email = response.data.email;
       });
+  }])
+  .controller('addcontactCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.$watch('contact', function() {
+      console.log($scope.contact);
+    }, true);
+
+    $scope.addcontact = function () {
+      $http.post('/contact', { 'contact': $scope.contact})
+        .then(function(response) {
+          console.log(response);
+        });
+    };
   }]);
 })();

@@ -17,12 +17,43 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12">
-          <h1 class="site-header"><i class="fa fa-book"></i>&nbsp;Address Book</h1>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand site-header" href="#">
+            <i class="fa fa-bank"></i>&nbsp;
+            <span class="primary">investor</span><span class="secondary">book</span>
+          </a>
         </div>
-      </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li ng-repeat="nav in mainNavbar" ng-hide="auth.user" ng-class="{active:isActive(nav.route)}"><a ng-href="#{{ nav.route }}">{{ nav.name }}</a></li>
+            <li ng-repeat="nav in userNavbar" ng-show="auth.user" ng-class="{active:isActive(nav.route)}"><a ng-href="#{{ nav.route }}">{{ nav.name }}</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <div class="btn-group">
+              <button ng-hide="auth.user" data-toggle="modal" data-target="#login-modal" class="btn btn-default">Log In</button>
+              <button ng-show="auth.user" ng-click="auth.$logout()" class="btn btn-default">Log Out</button>
+              <button data-toggle="modal" ng-hide="auth.user" data-target="#signup-modal" class="btn btn-primary">Sign Up</button>
+            </div>
+          </form>
+          <ul ng-show="auth.user" class="nav navbar-nav navbar-right">
+            <li class="bg-primary"><a ng-href="#/profile"><i class="fa fa-user"></i>&emsp;{{ auth.user.email }}</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container">
       <div class="row">
         <div class="col-xs-12" ng-view="">
         </div>
@@ -37,6 +68,7 @@
 
     <!-- angularjs -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/home.js"></script>
     <script src="scripts/contact.js"></script>
   </body>
 </html>

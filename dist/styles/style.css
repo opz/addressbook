@@ -1,0 +1,44 @@
+/**
+ * Color scheme:
+ * http://colorschemedesigner.com/#3y21T----w0w0
+ */
+html, body {
+  background-color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.44em;
+  margin: 0;
+}
+
+h1 { font-size: 3.375em; }
+h2 { font-size: 2.25em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.225em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; }
+
+.site-header {
+  font-family: Georgia, serif;
+}
+
+.primary {
+  color: #008bff;
+  /*color: #0050ff;*/
+}
+
+.secondary {
+  color: #ff9400;
+}
+
+.primary-bg {
+  background-color: #eee;
+}
+
+.secondary-bg {
+  background-color: #fff;
+}
+
+.fa {
+  color: #002a4d;
+}
