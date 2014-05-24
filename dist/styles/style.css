@@ -40,6 +40,10 @@ h6, .h6 { font-size: 1em; }
   background-color: #fff;
 }
 
+.page-toolbar {
+  margin-bottom: 1em;
+}
+
 .contact-list-entry {
   padding: 1em;
 }

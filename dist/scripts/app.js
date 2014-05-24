@@ -8,10 +8,6 @@
       templateUrl: 'templates/home.html',
       controller: 'homeCtrl'
     })
-    .when('/addcontact', {
-      templateUrl: 'templates/addcontact.html',
-      controller: 'addcontactCtrl'
-    })
     .when('/contact', {
       templateUrl: 'templates/contact.html',
       controller: 'contactCtrl'
@@ -27,7 +23,6 @@
   .run(function($rootScope) {
     $rootScope.navbar = [
       { name: 'Contacts', route: '/contactlist' },
-      { name: 'Add Contact', route: '/addcontact' }
     ];
   });
 })();

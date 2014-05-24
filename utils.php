@@ -28,6 +28,8 @@ function connect() {
  * @param $values array values with matching param keys
  */
 function bindSetParams(&$sth, $params, $values) {
+  if (!($sth || $params || $values)) return false;
+
   array_walk(array_replace(array_fill_keys($params, null), $values),
     function($value, $key) use ($sth) {
       $sth->bindParam(":$key", $value);

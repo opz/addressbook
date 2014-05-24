@@ -48,6 +48,7 @@ $app->get('/contact/:cid', function($cid) use ($app) {
 
 $app->post('/contact/', function() use ($app) {
   $contact = $app->request->getBody();
+  print_r($contact);
 
   try {
     $dbh = connect();

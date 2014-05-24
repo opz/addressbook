@@ -10,15 +10,19 @@
         $scope.email = response.data.email;
       });
   }])
-  .controller('addcontactCtrl', ['$scope', '$http', function($scope, $http) {
+  .controller('contactlistCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.addContactVisibility = false;
+    $scope.showAddContact = function() { $scope.addContactVisibility = true; };
+    $scope.hideAddContact = function() { $scope.addContactVisibility = false; };
+
+    $scope.contact = {};
     $scope.addcontact = function () {
       $http.post('/contact', $scope.contact)
         .then(function(response) {
-          console.log(response);
+          $scope.contacts.push($scope.contact);
         });
     };
-  }])
-  .controller('contactlistCtrl', ['$scope', '$http', function($scope, $http) {
+
     $scope.removecontact = function(i) {
       var id = $scope.contacts[i].id;
       $http.delete('/contact/' + id)
