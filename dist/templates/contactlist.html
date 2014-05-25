@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col-xs-12">
+    <h1 class="page-header">Contact List</h1>
+  </div>
+  <div class="col-xs-12" ng-repeat="contact in contacts">
+    <div class="contact-list-entry" ng-class-odd="'primary-bg'">
+      <img class="pull-left img-circle contact-list-img" src="http://placehold.it/64x64">
+      <p class="h3">
+        {{ contact.first }} {{ contact.last }}
+      </p>
+      <p class="h4">
+        <i class="fa fa-fw fa-envelope"></i>
+        {{ contact.email }}
+      </p>
+      <p class="h4">
+        <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
+        {{ contact.address }}
+      </p>
+      
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-sm btn-default">
+          <i class="fa fa-pencil"></i>
+        </button>
+        <button ng-click="removecontact($index)" type="button" class="btn btn-sm btn-danger">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</div>

@@ -11,15 +11,25 @@
       });
   }])
   .controller('addcontactCtrl', ['$scope', '$http', function($scope, $http) {
-    $scope.$watch('contact', function() {
-      console.log($scope.contact);
-    }, true);
-
     $scope.addcontact = function () {
-      $http.post('/contact', { 'contact': $scope.contact})
+      $http.post('/contact', $scope.contact)
         .then(function(response) {
           console.log(response);
         });
     };
+  }])
+  .controller('contactlistCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.removecontact = function(i) {
+      var id = $scope.contacts[i].id;
+      $http.delete('/contact/' + id)
+        .then(function() {
+          $scope.contacts.splice(i, 1);
+        });
+    };
+
+    $http.get('/contacts')
+      .then(function(response) {
+        $scope.contacts = response.data;
+      });
   }]);
 })();

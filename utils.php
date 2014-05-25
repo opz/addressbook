@@ -19,4 +19,19 @@ function connect() {
     : $dbh;
 }
 
+/**
+ * Binds values with keys listed in $params to PDO statement.
+ * Any param without a corresponding value gets bound as NULL.
+ *
+ * @param $sth object reference to a PDO statement
+ * @param $params array parameters to be bound
+ * @param $values array values with matching param keys
+ */
+function bindSetParams(&$sth, $params, $values) {
+  array_walk(array_replace(array_fill_keys($params, null), $values),
+    function($value, $key) use ($sth) {
+      $sth->bindParam(":$key", $value);
+    });
+}
+
 ?>

@@ -5,16 +5,81 @@
  * @author Will Shahda <will.shahda@gmail.com
  */
 
-$app->get('/contact/:id', function($id) use ($app) {
+$app->get('/contacts', function() use ($app) {
+  try {
+    $dbh = connect();
+
+    $sth = $dbh->prepare('select * from contacts');
+    $sth->execute();
+
+    $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
+  } catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    $app->response->setStatus(500);
+
+    die();
+  }
+
+  $app->response->setStatus(200);
+
+  echo json_encode($contacts);
+
+});
+
+$app->get('/contact/:cid', function($cid) use ($app) {
+  try {
+    $dbh = connect();
+
+    $sth = $dbh->prepare('select * from contacts where id = ?');
+    $sth->bindParam(1, $cid);
+    $sth->execute();
+    $contact = $sth->fetch(PDO::FETCH_ASSOC);
+  } catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    $app->response->setStatus(500);
+
+    die();
+  }
+
+  $app->response->setStatus(200);
+
+  echo json_encode($contact);
+});
+
+$app->post('/contact/', function() use ($app) {
+  $contact = $app->request->getBody();
+
+  try {
+    $dbh = connect();
+
+    $params = array('first', 'last', 'email',
+      'address', 'phone', 'notes');
+
+    $sql = 'insert into contacts (' . implode(', ', $params) . ')'
+      . 'values (:' . implode(', :', $params) . ')';
+    $sth = $dbh->prepare($sql);
+
+    bindSetParams($sth, $params, $contact);
+
+    $sth->execute();
+
+    $app->response->setStatus(201);
+  } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+      $app->response->setStatus(500);
+
+      die();
+  }
+});
+
+$app->delete('/contact/:id', function($id) use ($app) {
   if ($id) {
     try {
       $dbh = connect();
 
-      $sql = 'select * from contacts where id = ?';
+      $sql = 'delete from contacts where id = ?';
       $sth = $dbh->prepare($sql);
       $sth->execute(array($id));
-
-      $contact = $sth->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
       $app->response->setStatus(500);
@@ -23,33 +88,6 @@ $app->get('/contact/:id', function($id) use ($app) {
     }
 
     $app->response->setStatus(200);
-
-    echo json_encode($contact);
-  }
-});
-
-$app->post('/contact/', function() use ($app) {
-  $contact = json_decode($app->request->post('contact'));
-  print_r($app->request);
-
-  $first = $contact['first'];
-  $last = $contact['last'];
-  $email = $contact['email'];
-  $address = $contact['address'];
-  $phone = $contact['phone'];
-  $notes = $contact['notes'];
-
-  try {
-    $dbh = connect();
-
-    $sql = 'insert into contact (first, last, email, address, phone, notes) values (?, ?, ?, ?, ?, ?)';
-    $sth = $dbh->prepare($sql);
-    $sth->execute(array($first, $last, $email, $address, $phone, $notes));
-  } catch (PDOException $e) {
-      echo "Error: " . $e->getMessage();
-      $app->response->setStatus(500);
-
-      die();
   }
 });
 

@@ -36,8 +36,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li ng-repeat="nav in mainNavbar" ng-hide="auth.user" ng-class="{active:isActive(nav.route)}"><a ng-href="#{{ nav.route }}">{{ nav.name }}</a></li>
-            <li ng-repeat="nav in userNavbar" ng-show="auth.user" ng-class="{active:isActive(nav.route)}"><a ng-href="#{{ nav.route }}">{{ nav.name }}</a></li>
+            <li ng-repeat="nav in navbar" ng-class="{active:isActive(nav.route)}"><a ng-href="#{{ nav.route }}">{{ nav.name }}</a></li>
           </ul>
           <form class="navbar-form navbar-right">
             <div class="btn-group">
@@ -63,12 +62,16 @@
     <!-- bower:js -->
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- angularjs -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/home.js"></script>
-    <script src="scripts/contact.js"></script>
+    <!-- angularjs:controllers -->
+    <script src="scripts/controllers/home.js"></script>
+    <script src="scripts/controllers/contact.js"></script>
+    <!-- angularjs:services -->
+    <script src="scripts/services/contact.js"></script>
   </body>
 </html>
