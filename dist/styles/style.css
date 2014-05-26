@@ -19,6 +19,14 @@ h4, .h4 { font-size: 1.225em; }
 h5, .h5 { font-size: 1em; }
 h6, .h6 { font-size: 1em; }
 
+.fa {
+  color: #aaa;
+}
+
+.fa-inverse {
+  color: #ccc;
+}
+
 .site-header {
   font-family: Georgia, serif;
 }
@@ -40,11 +48,16 @@ h6, .h6 { font-size: 1em; }
   background-color: #fff;
 }
 
+.col-xs-12:nth-child(even) .contact-list-entry {
+  background-color: #eee;
+}
+
 .contact-list-entry {
   padding: 1em;
 }
 
 .contact-list-img {
+  font-size: 2em;
   margin-right: 1em;
 }
 
