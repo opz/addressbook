@@ -1,4 +1,4 @@
 *.sw*
-dist/bower_componenets
+dist/bower_components
 vendor
 config.php

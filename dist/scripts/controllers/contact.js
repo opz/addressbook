@@ -19,7 +19,8 @@
     $scope.addcontact = function () {
       $http.post('/contact', $scope.contact)
         .then(function(response) {
-          $scope.contacts.push($scope.contact);
+          $scope.contacts.unshift(angular.copy($scope.contact));
+          $scope.contact = {};
         });
     };
 
@@ -34,6 +35,8 @@
     $http.get('/contacts')
       .then(function(response) {
         $scope.contacts = response.data;
+        //if there are no contacts, make add contact form visible by default
+        if ($scope.contacts.length === 0) $scope.addContactVisibility = true;
       });
   }]);
 })();

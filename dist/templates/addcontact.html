@@ -1,46 +1,102 @@
-<div class="row">
-  <div class="col-xs-12">
-    <h2>Add Contact</h2>
+<form name="addcontactform"
+    ng-submit="addcontact()">
+
+  <div ng-show="addContactVisibility" class="slidedown">
+
+    <div class="row">
+      <div class="col-xs-12">
+        <h2>Add Contact</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+
+          <div ng-class="{'has-error': !addcontactform.first.$valid }"
+              class="form-group">
+            <label class="control-label">First name:</label>
+            <input name="first"
+                ng-model="contact.first"
+                class="form-control"
+                type="text"
+                required="">
+          </div>
+   
+          <div ng-class="{'has-error': !addcontactform.last.$valid }"
+              class="form-group">
+            <label class="control-label">Last name:</label>
+            <input name="last"
+                ng-model="contact.last"
+                class="form-control"
+                type="text"
+                required="">
+          </div>
+
+          <div ng-class="{'has-error': !addcontactform.email.$valid }"
+              class="form-group">
+            <label class="control-label">Email:</label>
+            <input name="email"
+                ng-model="contact.email"
+                class="form-control"
+                type="email"
+                required="">
+          </div>
+
+          <div ng-class="{'has-error': !addcontactform.phone.$valid }"
+              class="form-group">
+            <label class="control-label">Phone:</label>
+            <input name="phone"
+                ng-model="contact.phone"
+                class="form-control"
+                type="text">
+          </div>
+
+          <div ng-class="{'has-error': !addcontactform.address.$valid }"
+              class="form-group">
+            <label class="control-label">Address:</label>
+            <input name="address"
+                ng-model="contact.address"
+                class="form-control"
+                type="text">
+          </div>
+
+          <div ng-class="{'has-error': !addcontactform.notes.$valid }"
+              class="form-group">
+            <label class="control-label">Notes:</label>
+            <textarea name="notes"
+                ng-model="contact.notes"
+                class="form-control">
+            </textarea>
+          </div>
+
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-xs-12 col-sm-6">
-    <img class="img-thumbnail" src="http://placehold.it/350x350">
-  </div>
-  <div class="col-xs-12 col-sm-6">
-    <form>
-      <div class="form-group">
-        <label>First name:</label>
-        <input name="first" ng-model="contact.first" class="form-control" type="text">
-      </div>
-      <div class="form-group">
-        <label>Last name:</label>
-        <input name="last" ng-model="contact.last" class="form-control" type="text">
-      </div>
-      <div class="form-group">
-        <label>Email:</label>
-        <input name="email" ng-model="contact.email" class="form-control" type="text">
-      </div>
-      <div class="form-group">
-        <label>Phone:</label>
-        <input name="phone" ng-model="contact.phone" class="form-control" type="text">
-      </div>
-      <div class="form-group">
-        <label>Address:</label>
-        <input name="address" ng-model="contact.address" class="form-control" type="text">
-      </div>
-      <div class="form-group">
-        <label>Notes:</label>
-        <textarea name="notes" ng-model="contact.notes" class="form-control"></textarea>
-      </div>
-    </form>
-  </div>
-  <div class="col-xs-12">
-    <form>
+
+  <div class="row">
+    <div class="col-xs-12">
       <div class="form-group pull-right">
-        <button ng-click="hideAddContact()" class="btn btn-default" type="submit">Close</button>
-        <button ng-click="addcontact()" class="btn btn-primary" type="submit">Submit</button>
+
+        <button ng-click="hideAddContact()"
+            ng-show="addContactVisibility"
+            class="btn btn-default"
+            type="submit">
+          Close
+        </button>
+
+        <input ng-show="addContactVisibility"
+            ng-disabled="!addcontactform.$valid"
+            class="btn btn-primary"
+            type="submit">
+
+        <button ng-click="showAddContact()"
+            ng-hide="addContactVisibility"
+            type="button"
+            class="pull-right btn btn-primary">
+          Add Contact
+        </button>
+
       </div>
-    </form>
+    </div>
   </div>
-</div>
+</form>

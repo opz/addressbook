@@ -9,7 +9,7 @@ $app->get('/contacts', function() use ($app) {
   try {
     $dbh = connect();
 
-    $sth = $dbh->prepare('select * from contacts');
+    $sth = $dbh->prepare('select * from contacts order by created desc');
     $sth->execute();
 
     $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
@@ -48,7 +48,6 @@ $app->get('/contact/:cid', function($cid) use ($app) {
 
 $app->post('/contact/', function() use ($app) {
   $contact = $app->request->getBody();
-  print_r($contact);
 
   try {
     $dbh = connect();

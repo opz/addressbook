@@ -40,14 +40,32 @@ h6, .h6 { font-size: 1em; }
   background-color: #fff;
 }
 
-.page-toolbar {
-  margin-bottom: 1em;
-}
-
 .contact-list-entry {
   padding: 1em;
 }
 
 .contact-list-img {
   margin-right: 1em;
+}
+
+.slidedown
+{ 
+  -webkit-transition: 400ms ease-in-out all;
+  -moz-transition: 400ms ease-in-out all;
+  -ms-transition: 400ms ease-in-out all;
+  -o-transition: 400ms ease-in-out all;
+  transition: 400ms ease-in-out all;
+  opacity: 1;
+  overflow: hidden;
+  max-height: 2000px;
+} 
+
+.slidedown.ng-hide {
+  opacity: 0;
+  max-height: 0;
+}
+
+.slidedown.ng-hide-add,
+.slidedown.ng-hide-remove {
+  display: block !important;
 }

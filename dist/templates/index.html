@@ -40,9 +40,9 @@
           </ul>
           <form class="navbar-form navbar-right">
             <div class="btn-group">
-              <button ng-hide="auth.user" data-toggle="modal" data-target="#login-modal" class="btn btn-default">Log In</button>
+              <a href="#/login" ng-hide="auth.user" class="btn btn-default">Log In</a>
               <button ng-show="auth.user" ng-click="auth.$logout()" class="btn btn-default">Log Out</button>
-              <button data-toggle="modal" ng-hide="auth.user" data-target="#signup-modal" class="btn btn-primary">Sign Up</button>
+              <a href="#/signup" ng-hide="auth.user" class="btn btn-primary">Sign Up</a>
             </div>
           </form>
           <ul ng-show="auth.user" class="nav navbar-nav navbar-right">
@@ -63,14 +63,17 @@
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/ng-match/ng-match.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- angularjs -->
+    <!-- angularjs:app -->
     <script src="scripts/app.js"></script>
     <!-- angularjs:controllers -->
     <script src="scripts/controllers/home.js"></script>
     <script src="scripts/controllers/contact.js"></script>
+    <script src="scripts/controllers/user.js"></script>
     <!-- angularjs:services -->
     <script src="scripts/services/contact.js"></script>
   </body>
