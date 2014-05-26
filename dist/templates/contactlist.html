@@ -3,6 +3,8 @@
     <h1 class="page-header">Contact List</h1>
   </div>
 </div>
+
+<!-- Add contact form -->
 <div ng-include="'templates/addcontact.html'"></div>
 <div class="row">
   <div class="col-xs-12" ng-hide="contacts">
@@ -10,20 +12,26 @@
       No contacts
     </p>
   </div>
+
+  <!-- Contact list -->
   <div class="col-xs-12" ng-repeat="contact in contacts">
     <div class="contact-list-entry slidedown">
       <button ng-click="removecontact($index)" type="button" class="close">
         &times;
       </button>
 
+      <!-- Contact image -->
       <div class="pull-left contact-list-img fa-stack">
         <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
         <i class="fa fa-user fa-stack-1x"></i>
       </div>
 
+      <!-- Contact name -->
       <p class="h3">
         {{ contact.first }} {{ contact.last }}
       </p>
+
+      <!-- Contact attributes -->
       <p>
         <i class="fa fa-fw fa-envelope"></i>
         {{ contact.email }}
@@ -31,6 +39,7 @@
         <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
         {{ contact.address }}
       </p>
+
     </div>
   </div>
 </div>

@@ -1,10 +1,15 @@
+/**
+ * @author Will Shahda <will.shahda@gmail.com>
+ */
 (function() {
   'use strict';
 
-  angular.module('addressbookApp', ['ngRoute',
+  angular.module('addressbookApp', [
+    'ngRoute',
     'ngResource',
     'ngAnimate',
-    'ng-match'])
+    'ng-match'
+  ])
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
     .when('/', {
@@ -13,7 +18,7 @@
     })
     .when('/login', {
       templateUrl: 'templates/login.html',
-      controller: 'authCtrl'
+      controller: 'userCtrl'
     })
     .when('/signup', {
       templateUrl: 'templates/signup.html',

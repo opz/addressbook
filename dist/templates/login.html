@@ -2,18 +2,39 @@
   Log in to
   <span class="primary">investor</span><span class="secondary">book</span>
 </h1>
-<form>
-  <div class="form-group">
-    <label>Username</label>
-    <input ng-model="user.username" type="text" class="form-control">
+<form ng-submit="login(user.username, user.password)"
+    name="loginform"
+    novalidate="">
+
+  <!-- Email field -->
+  <div class="form-group"
+      ng-class="{ 'has-error': !loginform.email.$valid }">
+    <label class="control-label">Email</label>
+    <input ng-model="user.email"
+        name="email"
+        type="email"
+        class="form-control"
+        required="">
   </div>
-  <div class="form-group">
-    <label>Password</label>
-    <input ng-model="user.password" type="password" class="form-control">
+
+  <!-- Password field -->
+  <div class="form-group"
+      ng-class="{ 'has-error': !loginform.password.$valid }">
+    <label class="control-label">Password</label>
+    <input ng-model="user.password"
+        ng-minlength="6"
+        type="password"
+        class="form-control"
+        required="">
   </div>
+
+  <!-- Login button -->
   <div class="form-group">
-    <button ng-click="login(user.username, user.password)" type="button" class="btn btn-primary">
+    <button type="submit"
+        ng-disabled="!loginform.$valid"
+        class="btn btn-primary">
       Login
     </button>
   </div>
+
 </form>

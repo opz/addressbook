@@ -2,9 +2,12 @@
 /**
  * REST API routes for contacts
  *
- * @author Will Shahda <will.shahda@gmail.com
+ * @author Will Shahda <will.shahda@gmail.com>
  */
 
+/**
+ * @return array contact list
+ */
 $app->get('/contacts', function() use ($app) {
   try {
     $dbh = connect();
@@ -26,6 +29,11 @@ $app->get('/contacts', function() use ($app) {
 
 });
 
+/**
+ * @param int $cid contact id
+ *
+ * @return array contact attributes 
+ */
 $app->get('/contact/:cid', function($cid) use ($app) {
   try {
     $dbh = connect();
@@ -46,6 +54,11 @@ $app->get('/contact/:cid', function($cid) use ($app) {
   echo json_encode($contact);
 });
 
+/**
+ * Creates new contact
+ *
+ * @param array $contact contact attributes
+ */
 $app->post('/contact/', function() use ($app) {
   $contact = $app->request->getBody();
 
@@ -72,14 +85,19 @@ $app->post('/contact/', function() use ($app) {
   }
 });
 
-$app->delete('/contact/:id', function($id) use ($app) {
-  if ($id) {
+/**
+ * Deletes contact
+ *
+ * @param int $cid contact id
+ */
+$app->delete('/contact/:cid', function($cid) use ($app) {
+  if ($cid) {
     try {
       $dbh = connect();
 
       $sql = 'delete from contacts where id = ?';
       $sth = $dbh->prepare($sql);
-      $sth->execute(array($id));
+      $sth->execute(array($cid));
     } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
       $app->response->setStatus(500);

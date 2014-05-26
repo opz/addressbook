@@ -5,6 +5,11 @@
  * @author Will Shahda <will.shahda@gmail.com>
  */
 
+/**
+ * Creates new user
+ *
+ * @param array $user user attributes
+ */
 $app->post('/user', function() use ($app) {
   $user = $app->request->getBody();
 

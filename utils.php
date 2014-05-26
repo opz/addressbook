@@ -2,11 +2,16 @@
 /**
  * Miscellaneous utility functions, mainly for PDO
  *
- * @author Will Shahda <will.shahda@gmail.com
+ * @author Will Shahda <will.shahda@gmail.com>
  */
 
 require dirname(__FILE__) . '/config.php';
 
+/**
+ * Connects to the configured database
+ *
+ * @return object the database handler
+ */
 function connect() {
   global $host, $dbname, $dbuser, $dbpass;
 
