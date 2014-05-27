@@ -26,6 +26,7 @@
         $http.post('/user/' + $rootScope.auth.id + '/contact', $scope.contact)
           .then(function(response) {
             $scope.contacts.unshift(angular.copy($scope.contact));
+            $scope.addContactVisibility = false;
             $scope.contact = {};
           });
       };

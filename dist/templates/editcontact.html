@@ -94,15 +94,14 @@
           Save
         </button>
 
-        <!-- Show "edit contact" button -->
-        <button ng-click="showEditContact($index)"
-            ng-hide="contact.editContactVisibility"
-            type="button"
-            class="btn btn-default">
-          Edit Contact
-        </button>
-
       </div>
+
+      <!-- Show "edit contact" button -->
+      <a ng-click="showEditContact($index)"
+          ng-hide="contact.editContactVisibility">
+        Edit
+      </a>
+
     </div>
   </div>
 </form>

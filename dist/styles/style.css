@@ -19,6 +19,10 @@ h4, .h4 { font-size: 1.225em; }
 h5, .h5 { font-size: 1em; }
 h6, .h6 { font-size: 1em; }
 
+a {
+  cursor: pointer;
+}
+
 .fa {
   color: #aaa;
 }
