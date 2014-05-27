@@ -17,6 +17,8 @@
   }])
   .controller('contactlistCtrl', ['$scope', '$rootScope', '$http',
     function($scope, $rootScope, $http) {
+      $scope.contacts = [];
+
       //opens and closes "add contact" form
       $scope.addContactVisibility = false;
       $scope.showAddContact = function() { $scope.addContactVisibility = true; };

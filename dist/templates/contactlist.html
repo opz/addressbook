@@ -7,7 +7,7 @@
 <!-- Add contact form -->
 <div ng-include="'templates/addcontact.html'"></div>
 <div class="row">
-  <div class="col-xs-12" ng-hide="contacts">
+  <div class="col-xs-12" ng-hide="contacts.length > 0">
     <p class="h2 text-center">
       No contacts
     </p>
