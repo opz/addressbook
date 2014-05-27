@@ -36,9 +36,3 @@ create table users (
   password char(128) not null,
   primary key(id)
 );
-
-create table sessions (
-  id int not null auto_increment,
-  uid int not null,
-  primary key(id)
-);

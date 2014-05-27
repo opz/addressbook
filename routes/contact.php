@@ -8,18 +8,19 @@
 /**
  * @return array contact list
  */
-$app->get('/contacts', function() use ($app) {
+$app->get('/user/:uid/contacts', function($uid) use ($app) {
   try {
     $dbh = connect();
 
-    $sth = $dbh->prepare('select * from contacts order by created desc');
+    $sth = $dbh->prepare('select * from contacts where uid = :uid order by created desc');
+    $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
+
     $sth->execute();
 
     $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
   } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     $app->response->setStatus(500);
-
     die();
   }
 
@@ -45,7 +46,6 @@ $app->get('/contact/:cid', function($cid) use ($app) {
   } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     $app->response->setStatus(500);
-
     die();
   }
 
@@ -59,13 +59,14 @@ $app->get('/contact/:cid', function($cid) use ($app) {
  *
  * @param array $contact contact attributes
  */
-$app->post('/contact/', function() use ($app) {
+$app->post('/user/:uid/contact/', function($uid) use ($app) {
   $contact = $app->request->getBody();
+  $contact['uid'] = $uid;
 
   try {
     $dbh = connect();
 
-    $params = array('first', 'last', 'email',
+    $params = array('uid', 'first', 'last', 'email',
       'address', 'phone', 'notes');
 
     $sql = 'insert into contacts (' . implode(', ', $params) . ')'
@@ -80,7 +81,6 @@ $app->post('/contact/', function() use ($app) {
   } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
       $app->response->setStatus(500);
-
       die();
   }
 });
@@ -90,18 +90,18 @@ $app->post('/contact/', function() use ($app) {
  *
  * @param int $cid contact id
  */
-$app->delete('/contact/:cid', function($cid) use ($app) {
+$app->delete('/user/:uid/contact/:cid', function($uid, $cid) use ($app) {
   if ($cid) {
     try {
       $dbh = connect();
 
-      $sql = 'delete from contacts where id = ?';
+      $sql = 'delete from contacts where id = ? and uid = ?';
       $sth = $dbh->prepare($sql);
-      $sth->execute(array($cid));
+
+      $sth->execute(array($cid, $uid));
     } catch (PDOException $e) {
       echo "Error: " . $e->getMessage();
       $app->response->setStatus(500);
-
       die();
     }
 

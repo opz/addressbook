@@ -7,15 +7,31 @@
   'use strict';
 
   angular.module('addressbookApp')
-  .controller('userCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
-    $scope.user = {};
-    $scope.confirmpassword = '';
+  .controller('userCtrl', ['$scope', '$rootScope', '$http', '$location',
+    function($scope, $rootScope, $http, $location) {
+      $scope.user = {};
+      $scope.confirmpassword = '';
 
-    $scope.signup = function() {
-      $http.post('/user', $scope.user)
-        .then(function(response) {
-          $location.path('/login');
-        });
-    };
-  }]);
+      //create new user from model
+      $scope.signup = function() {
+        $http.post('/user', $scope.user)
+          .then(function(response) {
+            $location.path('/login');
+          });
+      };
+
+      //login with user model
+      $scope.login = function() {
+        $http.get('/user', { params: {
+          email: $scope.user.email,
+          password: $scope.user.password
+        } })
+          .then(function(response) {
+            if (response.data.hasOwnProperty('id')) {
+              $rootScope.auth = response.data;
+              $location.path('/contactlist');
+            }
+          });
+      };
+    }]);
 })();

@@ -36,9 +36,24 @@
       redirectTo: '/'
     });
   }])
-  .run(function($rootScope) {
-    $rootScope.navbar = [
-      { name: 'Contacts', route: '/contactlist' },
-    ];
-  });
+  .run(['$rootScope', '$location', function($rootScope, $location) {
+    //restrict private pages unless user is logged in
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {
+      if ($rootScope.auth && $rootScope.auth.hasOwnProperty('id')) {
+        $rootScope.navbar = [
+          { name: 'Contacts', route: '/contactlist' },
+        ];
+      } else if (next.templateUrl !== 'templates/home.html'
+        && next.templateUrl !== 'templates/login.html'
+        && next.templateUrl !== 'templates/signup.html') {
+          $location.path('/login');
+        }
+    });
+
+    //logout user
+    $rootScope.logout = function() {
+      $rootScope.auth = null;
+      $location.path('/login');
+    };
+  }]);
 })();

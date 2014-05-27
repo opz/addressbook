@@ -40,13 +40,13 @@
           </ul>
           <form class="navbar-form navbar-right">
             <div class="btn-group">
-              <a href="#/login" ng-hide="auth.user" class="btn btn-default">Log In</a>
-              <button ng-show="auth.user" ng-click="auth.$logout()" class="btn btn-default">Log Out</button>
-              <a href="#/signup" ng-hide="auth.user" class="btn btn-primary">Sign Up</a>
+              <a href="#/login" ng-hide="auth" class="btn btn-default">Log In</a>
+              <a href="#/signup" ng-hide="auth" class="btn btn-primary">Sign Up</a>
             </div>
+            <button ng-show="auth" ng-click="logout()" type="button" class="btn btn-default">Log Out</button>
           </form>
-          <ul ng-show="auth.user" class="nav navbar-nav navbar-right">
-            <li class="bg-primary"><a ng-href="#/profile"><i class="fa fa-user"></i>&emsp;{{ auth.user.email }}</a></li>
+          <ul ng-show="auth" class="nav navbar-nav navbar-right">
+            <li><a href="#/contactlist">{{ auth.email }}</a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -74,7 +74,5 @@
     <script src="scripts/controllers/home.js"></script>
     <script src="scripts/controllers/contact.js"></script>
     <script src="scripts/controllers/user.js"></script>
-    <!-- angularjs:services -->
-    <script src="scripts/services/contact.js"></script>
   </body>
 </html>
