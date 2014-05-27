@@ -24,10 +24,6 @@
       templateUrl: 'templates/signup.html',
       controller: 'userCtrl'
     })
-    .when('/contact', {
-      templateUrl: 'templates/contact.html',
-      controller: 'contactCtrl'
-    })
     .when('/contactlist', {
       templateUrl: 'templates/contactlist.html',
       controller: 'contactlistCtrl'

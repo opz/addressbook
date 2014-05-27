@@ -86,6 +86,43 @@ $app->post('/user/:uid/contact/', function($uid) use ($app) {
 });
 
 /**
+ * Update existing contact
+ *
+ * @param array $contact contact attributes
+ */
+$app->put('/user/:uid/contact/', function($uid) use ($app) {
+  $contact = $app->request->getBody();
+  print_r($contact);
+
+  try {
+    $dbh = connect();
+
+    $params = array('first', 'last', 'email',
+      'address', 'phone', 'notes');
+
+    $sql = 'update contacts set '
+      . implode(', ', array_map(function($param) {
+        return "$param = :$param";
+      }, $params))
+      . ' where id = :id and uid = :uid';
+    $sth = $dbh->prepare($sql);
+
+    $params[] = 'id';
+    $params[] = 'uid';
+
+    bindSetParams($sth, $params, $contact);
+
+    $sth->execute();
+
+    $app->response->setStatus(201);
+  } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
+      $app->response->setStatus(500);
+      die();
+  }
+});
+
+/**
  * Deletes contact
  *
  * @param int $cid contact id

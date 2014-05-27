@@ -1,0 +1,108 @@
+<form name="editcontactform"
+    ng-submit="editcontact($index)"
+    novalidate="">
+
+  <div ng-show="contact.editContactVisibility" class="slidedown">
+
+    <div class="row">
+      <div class="col-xs-12">
+
+        <!-- First name field -->
+        <div ng-class="{'has-error': !editcontactform.first.$valid }"
+            class="form-group">
+          <label class="control-label">First name:</label>
+          <input name="first"
+              ng-model="contact.first"
+              class="form-control"
+              type="text"
+              required="">
+        </div>
+ 
+        <!-- Last name field -->
+        <div ng-class="{'has-error': !editcontactform.last.$valid }"
+            class="form-group">
+          <label class="control-label">Last name:</label>
+          <input name="last"
+              ng-model="contact.last"
+              class="form-control"
+              type="text"
+              required="">
+        </div>
+
+        <!-- Email field -->
+        <div ng-class="{'has-error': !editcontactform.email.$valid }"
+            class="form-group">
+          <label class="control-label">Email:</label>
+          <input name="email"
+              ng-model="contact.email"
+              class="form-control"
+              type="email"
+              required="">
+        </div>
+
+        <!-- Phone field -->
+        <div ng-class="{'has-error': !editcontactform.phone.$valid }"
+            class="form-group">
+          <label class="control-label">Phone:</label>
+          <input name="phone"
+              ng-model="contact.phone"
+              class="form-control"
+              type="text">
+        </div>
+
+        <!-- Address field -->
+        <div ng-class="{'has-error': !editcontactform.address.$valid }"
+            class="form-group">
+          <label class="control-label">Address:</label>
+          <input name="address"
+              ng-model="contact.address"
+              class="form-control"
+              type="text">
+        </div>
+
+        <!-- Notes field -->
+        <div ng-class="{'has-error': !editcontactform.notes.$valid }"
+            class="form-group">
+          <label class="control-label">Notes:</label>
+          <textarea name="notes"
+              ng-model="contact.notes"
+              class="form-control">
+          </textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="form-group">
+
+        <!-- Close "edit contact" button -->
+        <button ng-click="hideEditContact($index)"
+            ng-show="contact.editContactVisibility"
+            class="btn btn-default"
+            type="button">
+          Close
+        </button>
+
+        <!-- Save updated contact button -->
+        <button ng-show="contact.editContactVisibility"
+            ng-disabled="!editcontactform.$valid"
+            class="btn btn-primary"
+            type="submit">
+          Save
+        </button>
+
+        <!-- Show "edit contact" button -->
+        <button ng-click="showEditContact($index)"
+            ng-hide="contact.editContactVisibility"
+            type="button"
+            class="btn btn-default">
+          Edit Contact
+        </button>
+
+      </div>
+    </div>
+  </div>
+</form>

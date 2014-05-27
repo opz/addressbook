@@ -36,8 +36,8 @@ function bindSetParams(&$sth, $params, $values) {
   if (!($sth || $params || $values)) return false;
 
   array_walk(array_replace(array_fill_keys($params, null), $values),
-    function($value, $key) use ($sth) {
-      $sth->bindParam(":$key", $value);
+    function($value, $key) use ($sth, $params) {
+      if (in_array($key, $params)) $sth->bindParam(":$key", $value);
     });
 }
 
