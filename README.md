@@ -3,7 +3,6 @@
 ## Install
 
 Install slim:
-
 ```shell
 php composer.phar install
 ```
@@ -11,6 +10,24 @@ php composer.phar install
 Install front-end dependencies:
 ```shell
 bower install
+```
+
+Create a new config file:
+```shell
+cp config-default.php config.php
+```
+
+Edit config file with database credentials:
+```php
+$host = 'localhost';
+$dbname = 'addressbook';
+$dbuser = 'root';
+$dbpass = '';
+```
+
+Run schema file to create database tables:
+```shell
+mysql -u<dbuser> -p<dbpass> <dbname> < data/schema.sql
 ```
 
 ## License
