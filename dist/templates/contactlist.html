@@ -42,15 +42,6 @@
             {{ contact.address }}
           </p>
 
-          <span ng-repeat="group in contact.groups"
-              class="badge badge-group">
-            <a ng-click="removecontactgroup($parent.$index, $index)" type="button" class="close badge-close">
-              &times;
-            </a>
-            {{ group.name }}
-            &nbsp;
-          </span>
-
           <!-- Add contact group button -->
           <div class="pull-left contact-group-btn form-group">
             <div class="btn-group">
@@ -60,8 +51,9 @@
                 Add group <span class="caret"></span>
               </button>
               <ul class="dropdown-menu" role="menu">
+                <li class="text-center" ng-hide="contactgroups.length > 0">Empty<li>
                 <li ng-repeat="group in contactgroups">
-                  <a ng-click="addgroup($index, group)">
+                  <a ng-click="addgroup($parent.$index, group)">
                     {{ group.name }}
                   </a>
                 </li>
@@ -69,6 +61,16 @@
             </div>
           </div>
           <!-- end of contact group button -->
+
+          <!-- list of groups contact is in -->
+          <span ng-repeat="group in contact.groups"
+              class="badge badge-group">
+            <a ng-click="removecontactgroup($parent.$index, $index)" type="button" class="close badge-close">
+              &times;
+            </a>
+            {{ group.name }}
+            &nbsp;
+          </span>
 
         </div>
       </div>

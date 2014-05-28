@@ -25,7 +25,7 @@ $app->get('/user/:uid/contacts', function($uid) use ($app) {
     foreach($contacts as $key => $contact) {
       $sql = 'select * from contact_group_jct '
         . 'join contact_groups on gid = contact_groups.id '
-        . 'where cid = :cid order by created desc';
+        . 'where cid = :cid order by contact_group_jct.created desc';
       $sth = $dbh->prepare($sql);
       $sth->bindParam(':cid', $contact['id'], PDO::PARAM_INT);
 
