@@ -16,32 +16,69 @@
   <!-- Contact list -->
   <div class="col-xs-12" ng-repeat="contact in contacts">
     <div class="contact-list-entry slidedown">
-      <button ng-click="removecontact($index)" type="button" class="close">
-        &times;
-      </button>
+      <div class="row">
+        <div class="col-xs-12">
+          <button ng-click="removecontact($index)" type="button" class="close">
+            &times;
+          </button>
 
-      <!-- Contact image -->
-      <div class="pull-left contact-list-img fa-stack">
-        <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-        <i class="fa fa-user fa-stack-1x"></i>
+          <!-- Contact image -->
+          <div class="pull-left contact-list-img fa-stack">
+            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+            <i class="fa fa-user fa-stack-1x"></i>
+          </div>
+
+          <!-- Contact name -->
+          <p class="h3">
+            {{ contact.first }} {{ contact.last }}
+          </p>
+
+          <!-- Contact attributes -->
+          <p>
+            <i class="fa fa-fw fa-envelope"></i>
+            {{ contact.email }}
+            <br>
+            <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
+            {{ contact.address }}
+          </p>
+
+          <span ng-repeat="group in contact.groups"
+              class="badge badge-group">
+            <a ng-click="removecontactgroup($parent.$index, $index)" type="button" class="close badge-close">
+              &times;
+            </a>
+            {{ group.name }}
+            &nbsp;
+          </span>
+
+          <!-- Add contact group button -->
+          <div class="pull-left contact-group-btn form-group">
+            <div class="btn-group">
+              <button type="button"
+                  class="btn btn-sm btn-default dropdown-toggle"
+                  data-toggle="dropdown">
+                Add group <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="group in contactgroups">
+                  <a ng-click="addgroup($index, group)">
+                    {{ group.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- end of contact group button -->
+
+        </div>
       </div>
+      <div class="row">
+        <div class="col-xs-12">
 
-      <!-- Contact name -->
-      <p class="h3">
-        {{ contact.first }} {{ contact.last }}
-      </p>
+          <div ng-include="'templates/editcontact.html'"></div>
 
-      <!-- Contact attributes -->
-      <p>
-        <i class="fa fa-fw fa-envelope"></i>
-        {{ contact.email }}
-        <br>
-        <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
-        {{ contact.address }}
-      </p>
-
-      <div ng-include="'templates/editcontact.html'"></div>
-
+        </div>
+      </div>
     </div>
   </div>
 </div>

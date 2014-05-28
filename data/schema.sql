@@ -1,7 +1,7 @@
-drop table contacts;
-drop table contact_groups;
-drop table contact_group_jct;
-drop table users;
+drop table if exists contacts;
+drop table if exists contact_groups;
+drop table if exists contact_group_jct;
+drop table if exists users;
 
 create table contacts (
   id int not null auto_increment,
@@ -18,7 +18,9 @@ create table contacts (
 
 create table contact_groups (
   id int not null auto_increment,
+  uid int not null,
   name varchar(255) not null,
+  created timestamp not null default current_timestamp,
   primary key(id)
 );
 
@@ -26,6 +28,7 @@ create table contact_group_jct (
   id int not null auto_increment,
   cid int not null,
   gid int not null,
+  created timestamp not null default current_timestamp,
   primary key(id)
 );
 

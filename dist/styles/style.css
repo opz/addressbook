@@ -23,12 +23,26 @@ a {
   cursor: pointer;
 }
 
+select.form-control {
+  width: auto;
+}
+
 .fa {
   color: #aaa;
 }
 
 .fa-inverse {
   color: #ccc;
+}
+
+.badge-group {
+  line-height: 1.5;
+  padding: 5px 10px;
+  margin-right: 0.5em;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  font-weight: normal;
 }
 
 .site-header {
@@ -63,6 +77,19 @@ a {
 .contact-list-img {
   font-size: 2em;
   margin-right: 1em;
+}
+
+.contact-group-btn {
+  padding: 0 0.5em 0 0;
+}
+
+.contact-group-btn button {
+  border-radius: 10px;
+}
+
+.badge-close {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .slidedown
