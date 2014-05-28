@@ -104,13 +104,13 @@
                   <input type="text"
                       class="form-control dropdown-control-left"
                       ng-model="group.name"
-                      placeholder="Create new group"
+                      placeholder="New group name"
                       name="groupname">
                   <span class="input-group-btn">
                     <button class="btn btn-default dropdown-control-right"
                         ng-click="creategroup()"
                         type="button">
-                      <i class="fa fa-plus"></i>
+                      &plus;
                     </button>
                   </span>
                 </div>
@@ -122,7 +122,7 @@
               </a>
             </li>
             <li class="divider"></li>
-            <li ng-hide="contactgroups.length > 0">Empty<li>
+            <li ng-hide="contactgroups.length > 0"><a>Empty</a><li>
             <li ng-repeat="group in contactgroups">
               <a ng-click="selectgroup(group)">
                 {{ group.name }}

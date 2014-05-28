@@ -52,6 +52,7 @@
           .then(function(response) {
             $scope.group.id = response.data.id;
             $scope.contactgroups.unshift(angular.copy($scope.group));
+            $scope.group = {};
           });
       };
 
