@@ -13,7 +13,9 @@ $app->get('/user/:uid/contacts', function($uid) use ($app) {
     $dbh = connect();
 
     //select contact list
-    $sql = 'select * from contacts '
+    $sql = 'select '
+      . 'id, first, last, email, address, phone, notes, created '
+      . 'from contacts '
       . 'where uid = :uid order by created desc';
     $sth = $dbh->prepare($sql);
     $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
@@ -23,7 +25,54 @@ $app->get('/user/:uid/contacts', function($uid) use ($app) {
     $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
 
     foreach($contacts as $key => $contact) {
-      $sql = 'select * from contact_group_jct '
+      $sql = 'select '
+        . 'gid as id, name, contact_group_jct.created as created '
+        . 'from contact_group_jct '
+        . 'join contact_groups on gid = contact_groups.id '
+        . 'where cid = :cid order by contact_group_jct.created desc';
+      $sth = $dbh->prepare($sql);
+      $sth->bindParam(':cid', $contact['id'], PDO::PARAM_INT);
+
+      $sth->execute();
+
+      $groups = $sth->fetchAll(PDO::FETCH_ASSOC);
+      $contacts[$key]['groups'] = $groups;
+    }
+  } catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    $app->response->setStatus(500);
+    die();
+  }
+
+  $app->response->setStatus(200);
+
+  echo json_encode($contacts);
+});
+
+/**
+ * @return array contact list filtered by contact group
+ */
+$app->get('/user/:uid/contactgroup/:gid/contacts', function($uid, $gid) use ($app) {
+  try {
+    $dbh = connect();
+
+    $sql = 'select '
+      . 'cid as id, first, last, email, address, phone, notes, contacts.created '
+      . 'from contact_group_jct '
+      . 'join contacts on contacts.id = cid '
+      . 'where uid = :uid and gid = :gid order by contacts.created desc';
+    $sth = $dbh->prepare($sql);
+    $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
+    $sth->bindParam(':gid', $gid, PDO::PARAM_INT);
+
+    $sth->execute();
+
+    $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach($contacts as $key => $contact) {
+      $sql = 'select '
+        . 'gid as id, name, contact_group_jct.created as created '
+        . 'from contact_group_jct '
         . 'join contact_groups on gid = contact_groups.id '
         . 'where cid = :cid order by contact_group_jct.created desc';
       $sth = $dbh->prepare($sql);
