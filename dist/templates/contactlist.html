@@ -39,19 +39,22 @@
 
             <!-- Contact attributes -->
             <p>
-              <a href="mailto:{{ contact.email }}">
-                <i class="fa fa-fw fa-envelope"></i>
-                {{ contact.email }}
-              </a>
-              <br>
               <a href="tel:{{ contact.phone }}">
                 <i ng-show="contact.phone" class="fa fa-fw fa-phone"></i>
                 {{ contact.phone }}
               </a>
             </p>
             <p>
-              <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
-              {{ contact.address }}
+              <a href="mailto:{{ contact.email }}">
+                <i class="fa fa-fw fa-envelope"></i>
+                {{ contact.email }}
+              </a>
+            </p>
+            <p>
+              <a target="_blank" href="http://maps.google.com/?q={{ contact.address }}">
+                <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
+                {{ contact.address }}
+              </a>
             <p>
             </p>
               <i ng-show="contact.notes" class="fa fa-fw fa-file-text"></i>
@@ -80,7 +83,7 @@
 
             <!-- list of groups contact is in -->
             <span ng-repeat="group in contact.groups"
-                class="badge badge-group">
+                class="badge badge-group primary-bg">
               <a ng-click="removecontactgroup($parent.$index, $index)" type="button" class="close badge-close">
                 &times;
               </a>

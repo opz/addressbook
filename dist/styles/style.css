@@ -83,7 +83,8 @@ select.form-control {
 }
 
 .primary-bg {
-  background-color: #eee;
+  color: #fff;
+  background-color: #428bca;
 }
 
 .secondary-bg {
