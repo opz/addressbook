@@ -92,6 +92,17 @@
           });
       };
 
+      //delete contact group
+      $scope.removegroup = function(event, i) {
+        event.stopPropagation();
+        var gid = $scope.contactgroups[i].id;
+        $http.delete('/user/' + $rootScope.auth.id + '/contactgroup/' + gid)
+          .then(function(response) {
+            $scope.contactgroups.splice(i, 1);
+            $scope.selectgroup($scope.selectedgroup);
+          });
+      };
+
       //remove contact group from a contact
       $scope.removecontactgroup = function(i, j) {
         var cid = $scope.contacts[i].id;

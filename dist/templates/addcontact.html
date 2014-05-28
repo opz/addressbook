@@ -127,6 +127,10 @@
             <li ng-repeat="group in contactgroups">
               <a ng-click="selectgroup(group)">
                 {{ group.name }}
+                <span ng-click="removegroup($event, $index)"
+                    type="button" class="close dropdown-close">
+                  &times;
+                </span>
               </a>
             </li>
           </ul>

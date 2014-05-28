@@ -118,6 +118,14 @@ select.form-control {
   line-height: 1;
 }
 
+a:hover .dropdown-close {
+  display: inline;
+}
+
+.dropdown-close {
+  display: none;
+}
+
 .slidedown
 { 
   -webkit-transition: 400ms ease-in-out all;
