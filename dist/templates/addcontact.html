@@ -107,10 +107,11 @@
                       placeholder="New group name"
                       name="groupname">
                   <span class="input-group-btn">
-                    <button class="btn btn-default dropdown-control-right"
+                    <button class="btn btn-primary dropdown-control-right"
+                        ng-disabled="!group.name"
                         ng-click="creategroup()"
                         type="button">
-                      &plus;
+                      Add
                     </button>
                   </span>
                 </div>
