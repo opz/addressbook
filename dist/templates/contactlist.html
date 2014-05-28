@@ -39,11 +39,23 @@
 
             <!-- Contact attributes -->
             <p>
-              <i class="fa fa-fw fa-envelope"></i>
-              {{ contact.email }}
+              <a href="mailto:{{ contact.email }}">
+                <i class="fa fa-fw fa-envelope"></i>
+                {{ contact.email }}
+              </a>
               <br>
+              <a href="tel:{{ contact.phone }}">
+                <i ng-show="contact.phone" class="fa fa-fw fa-phone"></i>
+                {{ contact.phone }}
+              </a>
+            </p>
+            <p>
               <i ng-show="contact.address" class="fa fa-fw fa-home"></i>
               {{ contact.address }}
+            <p>
+            </p>
+              <i ng-show="contact.notes" class="fa fa-fw fa-file-text"></i>
+              {{ contact.notes }}
             </p>
 
             <!-- Add contact group button -->
