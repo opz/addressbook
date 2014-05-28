@@ -57,6 +57,7 @@ select.form-control {
 .badge-group {
   line-height: 1.5;
   padding: 5px 10px;
+  margin-top: 0.5em;
   margin-right: 0.5em;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -64,13 +65,13 @@ select.form-control {
   font-weight: normal;
 }
 
+.page-header,
 .site-header {
   font-family: Georgia, serif;
 }
 
 .primary {
   color: #008bff;
-  /*color: #0050ff;*/
 }
 
 .secondary {
@@ -85,8 +86,9 @@ select.form-control {
   background-color: #fff;
 }
 
-.col-xs-12:nth-child(even) .contact-list-entry {
+.contact-list-entry {
   background-color: #eee;
+  margin-bottom: 30px;
 }
 
 .contact-list-entry {
@@ -99,7 +101,7 @@ select.form-control {
 }
 
 .contact-group-btn {
-  padding: 0 0.5em 0 0;
+  padding: 0.5em 0.5em 0 0;
 }
 
 .contact-group-btn button {
