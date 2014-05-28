@@ -27,6 +27,25 @@ select.form-control {
   width: auto;
 }
 
+.dropdown-form {
+  border-top: none;
+  border-radius: 0;
+  padding-top: 0;
+}
+
+.dropdown-control-left,
+.dropdown-control-right {
+  border-radius: 0;
+}
+
+.dropdown-control-left {
+  border-left: none;
+}
+
+.dropdown-control-right {
+  border-right: none;
+}
+
 .fa {
   color: #aaa;
 }

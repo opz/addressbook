@@ -11,6 +11,7 @@
     function($scope, $rootScope, $http) {
       $scope.contacts = [];
       $scope.contactgroups = [];
+      $scope.selectedgroup = null;
 
       //opens and closes "add contact" form
       $scope.addContactVisibility = false;
@@ -20,6 +21,11 @@
       //opens and closes "edit contact" form
       $scope.showEditContact = function(i) { $scope.contacts[i].editContactVisibility = true; };
       $scope.hideEditContact = function(i) { $scope.contacts[i].editContactVisibility = false; };
+
+      //filters view by group
+      $scope.selectgroup = function(group) {
+        $scope.selectedgroup = group;
+      };
 
       //pull contact group list
       $http.get('/user/' + $rootScope.auth.id + '/contactgroups')
@@ -36,6 +42,16 @@
             $scope.contacts.unshift(angular.copy($scope.contact));
             $scope.addContactVisibility = false;
             $scope.contact = {};
+          });
+      };
+
+      //creates new contact group
+      $scope.group = {};
+      $scope.creategroup = function() {
+        $http.post('/user/' + $rootScope.auth.id + '/contactgroup', $scope.group)
+          .then(function(response) {
+            $scope.group.id = response.data.id;
+            $scope.contactgroups.unshift(angular.copy($scope.group));
           });
       };
 

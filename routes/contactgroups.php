@@ -50,6 +50,7 @@ $app->post('/user/:uid/contactgroup/', function($uid) use ($app) {
     bindSetParams($sth, $params, $contactgroup);
 
     $sth->execute();
+    $gid = $dbh->lastInsertId();
 
     $app->response->setStatus(201);
   } catch (PDOException $e) {
@@ -57,6 +58,8 @@ $app->post('/user/:uid/contactgroup/', function($uid) use ($app) {
       $app->response->setStatus(500);
       die();
   }
+
+  if ($gid) echo json_encode(array('id' => $gid));
 });
 
 /**
