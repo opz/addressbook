@@ -62,7 +62,7 @@ $app->get(
   '/user/:uid/contactgroups',
   function($uid) use ($app) {
     try {
-      $contactgroups = ContactGroup::getAll($uid);
+      $contactgroups = \ContactGroup\getAll($uid);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -85,7 +85,7 @@ $app->post(
     $contactgroup = $app->request->getBody();
 
     try {
-      $gid = ContactGroup::saveContactGroup($uid, $contactgroup);
+      $gid = \ContactGroup\saveContactGroup($uid, $contactgroup);
 
       if ($gid) $app->response->setStatus(201);
       else $app->response->setStatus(400);
@@ -110,7 +110,7 @@ $app->post(
     $contactgroup = $app->request->getBody();
 
     try {
-      $cgid = ContactGroup::attachGroupToContact($uid, $cid, $contactgroup);
+      $cgid = \ContactGroup\attachGroupToContact($uid, $cid, $contactgroup);
 
       if ($cgid) $app->response->setStatus(201);
       else $app->response->setStatus(405);
@@ -134,18 +134,10 @@ $app->put(
     $contactgroup = $app->request->getBody();
 
     try {
-      $dbh = \Utils\connect();
+      $rowCount = \ContactGroup\updateContactGroup($uid, $contactgroup);
 
-      $params = array('id', 'uid', 'name');
-
-      $sql = 'update contact_groups set name = :name where id = :id and uid = :uid';
-      $sth = $dbh->prepare($sql);
-
-      \Utils\bindSetParams($sth, $params, $contactgroup);
-
-      $sth->execute();
-
-      $app->response->setStatus(201);
+      if ($rowCount) $app->response->setStatus(204);
+      else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -162,17 +154,13 @@ $app->delete(
   '/user/:uid/contactgroup/:gid',
   function($uid, $gid) use ($app) {
     try {
-      $dbh = \Utils\connect();
+      $rowCount = \ContactGroup\deleteContactGroup($uid, $gid);
 
-      $sql = 'delete from contact_groups where id = ? and uid = ?';
-      $sth = $dbh->prepare($sql);
-
-      $sth->execute(array($gid, $uid));
+      if ($rowCount) $app->response->setStatus(204);
+      else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
-
-    $app->response->setStatus(204);
   }
 )->conditions(array('uid' => '\d+', 'gid' => '\d+'));
 
@@ -187,17 +175,13 @@ $app->delete(
   '/user/:uid/contact/:cid/contactgroup/:gid',
   function($uid, $cid, $gid) use ($app) {
     try {
-      $dbh = \Utils\connect();
+      $rowCount = \ContactGroup\detachGroupFromContact($cid, $gid);
 
-      $sql = 'delete from contact_group_jct where cid = ? and gid = ?';
-      $sth = $dbh->prepare($sql);
-
-      $sth->execute(array($cid, $gid));
+      if ($rowCount) $app->response->setStatus(204);
+      else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
-
-    $app->response->setStatus(204);
   }
 )->conditions(array('uid' => '\d+', 'cid' => '\d+', 'gid' => '\d+'));
 

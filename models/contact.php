@@ -151,6 +151,11 @@ function updateContact($uid, $contact) {
   return $sth->rowCount();
 }
 
+/**
+ * @param int $uid id of logged in user
+ * @param int $cid contact group id
+ * @return int number of rows deleted
+ */
 function deleteContact($uid, $cid) {
   $dbh = \Utils\connect();
 

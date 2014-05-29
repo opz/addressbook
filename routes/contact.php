@@ -139,7 +139,7 @@ $app->put(
     try {
       $rowCount = \Contact\updateContact($uid, $contact);
 
-      if ($rowCount) $app->response->setStatus(202);
+      if ($rowCount) $app->response->setStatus(204);
       else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
@@ -159,13 +159,11 @@ $app->delete(
     try {
       $rowCount = \Contact\deleteContact($uid, $cid);
 
-      if ($rowCount) $app->response->setStatus(202);
+      if ($rowCount) $app->response->setStatus(204);
       else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
-
-    $app->response->setStatus(204);
   }
 )->conditions(array('uid' => '\d+', 'cid' => '\d+'));
 
