@@ -126,6 +126,10 @@ a:hover .dropdown-close {
   display: none;
 }
 
+.contact-group-dropdown {
+  margin-right: 0.5em;
+}
+
 .slidedown
 { 
   -webkit-transition: 400ms ease-in-out all;

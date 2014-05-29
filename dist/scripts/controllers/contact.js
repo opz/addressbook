@@ -85,6 +85,14 @@
           });
       };
 
+      //updates contact group
+      $scope.updategroup = function() {
+        $http.put('/user/' + $rootScope.auth.id + '/contactgroup', $scope.selectedgroup)
+          .then(function(response) {
+            $scope.selectgroup($scope.selectedgroup);
+          });
+      };
+
       //remove contact at index
       $scope.removecontact = function(i) {
         var id = $scope.contacts[i].id;

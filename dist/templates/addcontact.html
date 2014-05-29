@@ -85,7 +85,7 @@
 
       <!-- Contact group dropdown -->
       <div ng-hide="addContactVisibility"
-          class="pull-left form-group">
+          class="contact-group-dropdown pull-left form-group">
         <div class="btn-group">
           <button type="button"
               class="btn btn-default dropdown-toggle"
@@ -137,6 +137,18 @@
         </div>
       </div>
       <!-- end of contact group dropdown -->
+
+      <!-- contact group rename input -->
+      <div class="form-group form-inline" ng-show="selectedgroup !== null">
+        <input ng-model="selectedgroup.name" type="text"
+            placeholder="Change group name"
+            name="grouprename" class="form-control">
+        <button ng-disabled="!selectedgroup.name"
+            ng-click="updategroup()"
+            type="button" class="btn btn-default">
+          Save
+        </button>
+      </div>
 
       <div class="form-group pull-right">
 
