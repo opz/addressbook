@@ -77,9 +77,9 @@ class Utils {
    */
   public static function restResponse($response, $data) {
     if ($data === false) $response->setStatus(400);
-    else if (count($data) === 0) $response->setStatus(404);
     else {
-      $response->setStatus(200);
+      if (count($data) === 0) $response->setStatus(404);
+      else $response->setStatus(200);
       return json_encode($data);
     }
 

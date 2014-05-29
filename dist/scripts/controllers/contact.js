@@ -31,10 +31,12 @@
           : $http.get('/user/' + $rootScope.auth.id + '/contactgroup/' + group.id + '/contacts');
 
         promise.then(function(response) {
-            $scope.contacts = response.data;
-            //if there are no contacts, make add contact form visible by default
-            if ($scope.contacts.length === 0) $scope.addContactVisibility = true;
-          });
+          $scope.contacts = response.data;
+          //if there are no contacts, make add contact form visible by default
+          if ($scope.contacts.length === 0) $scope.addContactVisibility = true;
+        }, function(response) {
+          $scope.contacts = [];
+        });
       };
 
       //pull contact group list
