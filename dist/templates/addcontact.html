@@ -139,7 +139,7 @@
       <!-- end of contact group dropdown -->
 
       <!-- contact group rename input -->
-      <div class="form-group form-inline" ng-show="selectedgroup !== null">
+      <div class="form-group form-inline pull-left" ng-show="selectedgroup !== null && !addContactVisibility">
         <input ng-model="selectedgroup.name" type="text"
             placeholder="Change group name"
             name="grouprename" class="form-control">
