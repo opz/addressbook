@@ -82,6 +82,8 @@
         $http.put('/user/' + $rootScope.auth.id + '/contact', $scope.contacts[i])
           .then(function(response) {
             $scope.contacts[i].editContactVisibility = false;
+          }, function(response) {
+            $scope.contacts[i].editContactVisibility = false;
           });
       };
 
