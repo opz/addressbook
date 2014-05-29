@@ -1,6 +1,6 @@
 <?php
 /**
- * REST API routes for users
+ * User model
  *
  * @author Will Shahda <will.shahda@gmail.com>
  * @copyright 2014 Will Shahda
@@ -29,67 +29,51 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Overview of user routes
- *
- * GET -- /user
- * retrieve user if valid login
- *
- * POST -- /user
- * create new user
- */
+namespace User;
 
 require_once dirname(__FILE__) . '/../utils.php';
-require_once dirname(__FILE__) . '/../models/user.php';
 
 /**
- * @param string $email user email login
- * @param string $password user password
- * @return array user attributes if email and password are valid
+ * @param array $user array with an email and password
+ * @return array valid user on successful login
  */
-$app->get('/user', function() use ($app) {
-  $user = $app->request->get();
+function getUser($user) {
+  $dbh = \Utils\connect();
 
-  if (!(isset($user['email']) || isset($user['password']))) {
-    $app->halt(403);
-  }
+  $params = array('email', 'password');
 
-  $user['password'] = hash('sha512', $user['password']);
+  $sql = 'select id, email from users where '
+    . implode(' and ', array_map(function($param) { return "$param = :$param"; }, $params));
+  $sth = $dbh->prepare($sql);
 
-  try {
-    $user = \User\getUser($user);
-  } catch (PDOException $e) {
-    $app->halt(500, 'Error: ' . $e->getMessage());
-  }
+  \Utils\bindSetParams($sth, $params, $user);
 
-  if ($user) $app->response->setStatus(200);
-  else $app->response->setStatus(403);
+  $sth->execute();
 
-  echo json_encode($user);
-});
+  $user = $sth->fetch(\PDO::FETCH_ASSOC);
+
+  return $user;
+}
 
 /**
- * Creates new user
- *
  * @param array $user user attributes
+ * @return int id of new user
  */
-$app->post('/user', function() use ($app) {
-  $user = $app->request->getBody();
+function saveUser($user) {
+  $dbh = \Utils\connect();
 
-  if (!isset($user['password'])) {
-    $app->halt(400);
-  }
+  $params = array('email', 'password');
 
-  $user['password'] = hash('sha512', $user['password']);
+  $sql = 'insert into users (' . implode(', ', $params) . ')'
+    . ' values (:' . implode(', :', $params) . ')';
+  $sth = $dbh->prepare($sql);
 
-  try {
-    $uid = \User\saveUser($user);
+  \Utils\bindSetParams($sth, $params, $user);
 
-    if ($uid) $app->response->setStatus(201);
-    else $app->response->setStatus(400);
-  } catch (PDOException $e) {
-    $app->halt(500, 'Error: ' . $e->getMessage());
-  }
+  $sth->execute();
+  $uid = $dbh->lastInsertId();
 
-  if ($uid) echo json_encode(array('id' => $uid));
-});
+  return $uid;
+}
+
+?>
