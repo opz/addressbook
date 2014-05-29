@@ -54,7 +54,7 @@ $app->get('/user', function() use ($app) {
   $user['password'] = hash('sha512', $user['password']);
 
   try {
-    $dbh = Utils::connect();
+    $dbh = \Utils\connect();
 
     $params = array('email', 'password');
 
@@ -62,7 +62,7 @@ $app->get('/user', function() use ($app) {
       . implode(' and ', array_map(function($param) { return "$param = :$param"; }, $params));
     $sth = $dbh->prepare($sql);
 
-    Utils::bindSetParams($sth, $params, $user);
+    \Utils\bindSetParams($sth, $params, $user);
 
     $sth->execute();
 
@@ -92,7 +92,7 @@ $app->post('/user', function() use ($app) {
   $user['password'] = hash('sha512', $user['password']);
 
   try {
-    $dbh = Utils::connect();
+    $dbh = \Utils\connect();
 
     $params = array('email', 'password');
 
@@ -100,7 +100,7 @@ $app->post('/user', function() use ($app) {
       . ' values (:' . implode(', :', $params) . ')';
     $sth = $dbh->prepare($sql);
 
-    Utils::bindSetParams($sth, $params, $user);
+    \Utils\bindSetParams($sth, $params, $user);
 
     $sth->execute();
 
