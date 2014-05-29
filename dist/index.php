@@ -30,7 +30,7 @@
  */
 
 require '../vendor/autoload.php';
-require '../utils.php';
+require_once '../utils.php';
 
 $app = new \Slim\Slim();
 

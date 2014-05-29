@@ -48,6 +48,9 @@
  * delete a contact
  */
 
+require_once dirname(__FILE__) . '/../utils.php';
+require_once dirname(__FILE__) . '/../models/contact.php';
+
 /**
  * @param int $uid id of logged in user
  * @return array contact list
@@ -56,22 +59,10 @@ $app->get(
   '/user/:uid/contacts',
   function($uid) use ($app) {
     try {
-      $dbh = Utils::connect();
-
-      //select contact list
-      $sql = 'select '
-        . 'id, first, last, email, address, phone, notes, created '
-        . 'from contacts '
-        . 'where uid = :uid order by created desc';
-      $sth = $dbh->prepare($sql);
-      $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
-
-      $sth->execute();
-
-      $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
+      $contacts = Contact::getAll($uid);
 
       foreach($contacts as $key => $contact) {
-        $groups = getAttachedGroups($dbh, $contact['id']);
+        $groups = Contact::getAttachedGroups($contact['id']);
         $contacts[$key]['groups'] = $groups;
       }
     } catch (PDOException $e) {
@@ -93,23 +84,10 @@ $app->get(
   '/user/:uid/contactgroup/:gid/contacts',
   function($uid, $gid) use ($app) {
     try {
-      $dbh = Utils::connect();
-
-      $sql = 'select '
-        . 'cid as id, first, last, email, address, phone, notes, contacts.created '
-        . 'from contact_group_jct '
-        . 'join contacts on contacts.id = cid '
-        . 'where uid = :uid and gid = :gid order by contacts.created desc';
-      $sth = $dbh->prepare($sql);
-      $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
-      $sth->bindParam(':gid', $gid, PDO::PARAM_INT);
-
-      $sth->execute();
-
-      $contacts = $sth->fetchAll(PDO::FETCH_ASSOC);
+      $contacts = Contact::getContactsByGroup($uid, $gid);
 
       foreach($contacts as $key => $contact) {
-        $groups = getAttachedGroups($dbh, $contact['id']);
+        $groups = Contact::getAttachedGroups($contact['id']);
         $contacts[$key]['groups'] = $groups;
       }
     } catch (PDOException $e) {
@@ -135,22 +113,10 @@ $app->post(
     $contact['uid'] = $uid;
 
     try {
-      $dbh = Utils::connect();
+      $cid = Contact::saveContact($contact);
 
-      //insert contact
-      $params = array('uid', 'first', 'last', 'email',
-        'address', 'phone', 'notes');
-
-      $sql = 'insert into contacts (' . implode(', ', $params) . ')'
-        . ' values (:' . implode(', :', $params) . ')';
-      $sth = $dbh->prepare($sql);
-
-      Utils::bindSetParams($sth, $params, $contact);
-
-      $sth->execute();
-      $cid = $dbh->lastInsertId();
-
-      $app->response->setStatus(201);
+      if ($cid) $app->response->setStatus(201);
+      else $app->response->setStatus(400);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -171,26 +137,10 @@ $app->put(
     $contact = $app->request->getBody();
 
     try {
-      $dbh = Utils::connect();
+      $rowCount = Contact::updateContact($uid, $contact);
 
-      $params = array('first', 'last', 'email',
-        'address', 'phone', 'notes');
-
-      $sql = 'update contacts set '
-        . implode(', ', array_map(function($param) {
-          return "$param = :$param";
-        }, $params))
-        . ' where id = :id and uid = :uid';
-      $sth = $dbh->prepare($sql);
-
-      $params[] = 'id';
-      $params[] = 'uid';
-
-      Utils::bindSetParams($sth, $params, $contact);
-
-      $sth->execute();
-
-      $app->response->setStatus(201);
+      if ($rowCount) $app->response->setStatus(202);
+      else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -207,12 +157,10 @@ $app->delete(
   '/user/:uid/contact/:cid',
   function($uid, $cid) use ($app) {
     try {
-      $dbh = Utils::connect();
+      $rowCount = Contact::deleteContact($uid, $cid);
 
-      $sql = 'delete from contacts where id = ? and uid = ?';
-      $sth = $dbh->prepare($sql);
-
-      $sth->execute(array($cid, $uid));
+      if ($rowCount) $app->response->setStatus(202);
+      else $app->response->setStatus(404);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -220,22 +168,5 @@ $app->delete(
     $app->response->setStatus(204);
   }
 )->conditions(array('uid' => '\d+', 'cid' => '\d+'));
-
-function getAttachedGroups($dbh, $cid) {
-  $sql = 'select '
-    . 'gid as id, name, contact_group_jct.created as created '
-    . 'from contact_group_jct '
-    . 'join contact_groups on gid = contact_groups.id '
-    . 'where cid = :cid order by contact_group_jct.created desc';
-
-  $sth = $dbh->prepare($sql);
-  $sth->bindParam(':cid', $cid, PDO::PARAM_INT);
-
-  $sth->execute();
-
-  $groups = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-  return $groups;
-}
 
 ?>

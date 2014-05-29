@@ -29,7 +29,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-require dirname(__FILE__) . '/config.php';
+require_once dirname(__FILE__) . '/config.php';
 
 /**
  * Collection of convenience methods
