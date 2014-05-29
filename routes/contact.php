@@ -30,15 +30,33 @@
  */
 
 /**
- * @param int $uid id of logged in user
+ * Overview of contact routes
  *
+ * GET -- /user/:uid/contacts
+ * retrieve user contact list
+ *
+ * GET -- /user/:uid/contactgroup/:gid/contacts
+ * retrieve user contact list filtered by contact group
+ *
+ * POST -- /user/:uid/contact
+ * create new contact for user
+ *
+ * PUT -- /user/:uid/contact
+ * update user's contact
+ *
+ * DELETE -- /user/:uid/contact/:cid
+ * delete a contact
+ */
+
+/**
+ * @param int $uid id of logged in user
  * @return array contact list
  */
 $app->get(
   '/user/:uid/contacts',
   function($uid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       //select contact list
       $sql = 'select '
@@ -60,7 +78,7 @@ $app->get(
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = restResponse($app->response, $contacts)) !== false) {
+    if (($output = Utils::restResponse($app->response, $contacts)) !== false) {
       echo $output;
     }
   }
@@ -69,14 +87,13 @@ $app->get(
 /**
  * @param int $uid id of logged in user
  * @param int $gid contact group id
- *
  * @return array contact list filtered by contact group
  */
 $app->get(
   '/user/:uid/contactgroup/:gid/contacts',
   function($uid, $gid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sql = 'select '
         . 'cid as id, first, last, email, address, phone, notes, contacts.created '
@@ -99,7 +116,7 @@ $app->get(
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = restResponse($app->response, $contacts)) !== false) {
+    if (($output = Utils::restResponse($app->response, $contacts)) !== false) {
       echo $output;
     }
   }
@@ -112,13 +129,13 @@ $app->get(
  * @param array $contact contact attributes
  */
 $app->post(
-  '/user/:uid/contact/',
+  '/user/:uid/contact',
   function($uid) use ($app) {
     $contact = $app->request->getBody();
     $contact['uid'] = $uid;
 
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       //insert contact
       $params = array('uid', 'first', 'last', 'email',
@@ -128,7 +145,7 @@ $app->post(
         . ' values (:' . implode(', :', $params) . ')';
       $sth = $dbh->prepare($sql);
 
-      bindSetParams($sth, $params, $contact);
+      Utils::bindSetParams($sth, $params, $contact);
 
       $sth->execute();
       $cid = $dbh->lastInsertId();
@@ -149,12 +166,12 @@ $app->post(
  * @param array $contact contact attributes
  */
 $app->put(
-  '/user/:uid/contact/',
+  '/user/:uid/contact',
   function($uid) use ($app) {
     $contact = $app->request->getBody();
 
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $params = array('first', 'last', 'email',
         'address', 'phone', 'notes');
@@ -169,7 +186,7 @@ $app->put(
       $params[] = 'id';
       $params[] = 'uid';
 
-      bindSetParams($sth, $params, $contact);
+      Utils::bindSetParams($sth, $params, $contact);
 
       $sth->execute();
 
@@ -190,7 +207,7 @@ $app->delete(
   '/user/:uid/contact/:cid',
   function($uid, $cid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sql = 'delete from contacts where id = ? and uid = ?';
       $sth = $dbh->prepare($sql);

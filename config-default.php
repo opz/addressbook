@@ -29,9 +29,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-$host = 'localhost';
-$dbname = 'addressbook';
-$dbuser = 'root';
-$dbpass = '';
+class Config {
+  const HOST = 'localhost';
+  const DBNAME = 'addressbook';
+  const DBUSER = 'root';
+  const DBPASS = '';
+}
 
 ?>

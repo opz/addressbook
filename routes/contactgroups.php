@@ -30,15 +30,36 @@
  */
 
 /**
- * @param int $uid id of logged in user
+ * Overview of contact group routes
  *
+ * GET -- /user/:uid/contactgroups
+ * retrieve user contact groups
+ *
+ * POST -- /user/:uid/contactgroup
+ * create new contact group for user
+ *
+ * POST -- /user/:uid/contact/:cid/contactgroup
+ * attach contact group to a users contact
+ *
+ * PUT -- /user/:uid/contactgroup
+ * update contact group
+ *
+ * DELETE -- /user/:uid/contactgroup/:gid
+ * delete contact group
+ *
+ * DELETE -- /user/:uid/contact/:cid/contactgroup/:gid
+ * detach a contact group from a users contact
+ */
+
+/**
+ * @param int $uid id of logged in user
  * @return array contact group list
  */
 $app->get(
   '/user/:uid/contactgroups',
   function($uid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sth = $dbh->prepare('select * from contact_groups where uid = :uid order by created desc');
       $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
@@ -50,7 +71,7 @@ $app->get(
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = restResponse($app->response, $contactgroups)) !== false) {
+    if (($output = Utils::restResponse($app->response, $contactgroups)) !== false) {
       echo $output;
     }
   }
@@ -63,13 +84,13 @@ $app->get(
  * @param array $contactgroup contact group attributes
  */
 $app->post(
-  '/user/:uid/contactgroup/',
+  '/user/:uid/contactgroup',
   function($uid) use ($app) {
     $contactgroup = $app->request->getBody();
     $contactgroup['uid'] = $uid;
 
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $params = array('uid', 'name');
 
@@ -77,7 +98,7 @@ $app->post(
         . ' values (:' . implode(', :', $params) . ')';
       $sth = $dbh->prepare($sql);
 
-      bindSetParams($sth, $params, $contactgroup);
+      Utils::bindSetParams($sth, $params, $contactgroup);
 
       $sth->execute();
       $gid = $dbh->lastInsertId();
@@ -99,12 +120,12 @@ $app->post(
  * @param array $contactgroup contact group attributes
  */
 $app->post(
-  '/user/:uid/contact/:cid/contactgroup/',
+  '/user/:uid/contact/:cid/contactgroup',
   function($uid, $cid) use ($app) {
     $contactgroup = $app->request->getBody();
 
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sql = 'insert into contact_group_jct (cid, gid) values (:cid, :gid)';
       $sth = $dbh->prepare($sql);
@@ -130,19 +151,19 @@ $app->post(
  * @param array $contactgroup contact group attributes
  */
 $app->put(
-  '/user/:uid/contactgroup/',
+  '/user/:uid/contactgroup',
   function($uid) use ($app) {
     $contactgroup = $app->request->getBody();
 
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $params = array('id', 'uid', 'name');
 
       $sql = 'update contact_groups set name = :name where id = :id and uid = :uid';
       $sth = $dbh->prepare($sql);
 
-      bindSetParams($sth, $params, $contactgroup);
+      Utils::bindSetParams($sth, $params, $contactgroup);
 
       $sth->execute();
 
@@ -163,7 +184,7 @@ $app->delete(
   '/user/:uid/contactgroup/:gid',
   function($uid, $gid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sql = 'delete from contact_groups where id = ? and uid = ?';
       $sth = $dbh->prepare($sql);
@@ -188,7 +209,7 @@ $app->delete(
   '/user/:uid/contact/:cid/contactgroup/:gid',
   function($uid, $cid, $gid) use ($app) {
     try {
-      $dbh = connect();
+      $dbh = Utils::connect();
 
       $sql = 'delete from contact_group_jct where cid = ? and gid = ?';
       $sth = $dbh->prepare($sql);

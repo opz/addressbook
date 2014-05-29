@@ -30,23 +30,31 @@
  */
 
 /**
+ * Overview of user routes
+ *
+ * GET -- /user
+ * retrieve user if valid login
+ *
+ * POST -- /user
+ * create new user
+ */
+
+/**
  * @param string $email user email login
  * @param string $password user password
- *
  * @return array user attributes if email and password are valid
  */
 $app->get('/user', function() use ($app) {
   $user = $app->request->get();
 
   if (!(isset($user['email']) || isset($user['password']))) {
-    $app->response->setStatus(403);
-    die();
+    $app->halt(403);
   }
 
   $user['password'] = hash('sha512', $user['password']);
 
   try {
-    $dbh = connect();
+    $dbh = Utils::connect();
 
     $params = array('email', 'password');
 
@@ -54,7 +62,7 @@ $app->get('/user', function() use ($app) {
       . implode(' and ', array_map(function($param) { return "$param = :$param"; }, $params));
     $sth = $dbh->prepare($sql);
 
-    bindSetParams($sth, $params, $user);
+    Utils::bindSetParams($sth, $params, $user);
 
     $sth->execute();
 
@@ -84,7 +92,7 @@ $app->post('/user', function() use ($app) {
   $user['password'] = hash('sha512', $user['password']);
 
   try {
-    $dbh = connect();
+    $dbh = Utils::connect();
 
     $params = array('email', 'password');
 
@@ -92,7 +100,7 @@ $app->post('/user', function() use ($app) {
       . ' values (:' . implode(', :', $params) . ')';
     $sth = $dbh->prepare($sql);
 
-    bindSetParams($sth, $params, $user);
+    Utils::bindSetParams($sth, $params, $user);
 
     $sth->execute();
 
