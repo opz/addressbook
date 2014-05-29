@@ -122,25 +122,37 @@ $app->post(
 $app->post(
   '/user/:uid/contact/:cid/contactgroup',
   function($uid, $cid) use ($app) {
+    $cgid = null;
     $contactgroup = $app->request->getBody();
 
     try {
       $dbh = Utils::connect();
 
-      $sql = 'insert into contact_group_jct (cid, gid) values (:cid, :gid)';
+      $sql = 'select id from contact_group_jct where cid = :cid and gid = :gid';
       $sth = $dbh->prepare($sql);
       $sth->bindParam(':cid', $cid, PDO::PARAM_INT);
       $sth->bindParam(':gid', $contactgroup['id'], PDO::PARAM_INT);
 
       $sth->execute();
-      $gid = $dbh->lastInsertId();
 
-      $app->response->setStatus(201);
+      $row = $sth->fetch(PDO::FETCH_ASSOC);
+
+      if ($row === false || count($row) === 0) {
+        $sql = 'insert into contact_group_jct (cid, gid) values (:cid, :gid)';
+        $sth = $dbh->prepare($sql);
+        $sth->bindParam(':cid', $cid, PDO::PARAM_INT);
+        $sth->bindParam(':gid', $contactgroup['id'], PDO::PARAM_INT);
+
+        $sth->execute();
+        $cgid = $dbh->lastInsertId();
+
+        $app->response->setStatus(201);
+      } else $app->response->setStatus(405);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if ($gid) echo json_encode(array('id' => $gid));
+    if ($cgid !== null) echo json_encode(array('id' => $cgid));
   }
 )->conditions(array('uid' => '\d+', 'cid' => '\d+'));
 
