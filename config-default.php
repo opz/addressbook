@@ -29,11 +29,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class Config {
-  const HOST = 'localhost';
-  const DBNAME = 'addressbook';
-  const DBUSER = 'root';
-  const DBPASS = '';
-}
+namespace Config;
+
+const HOST = 'localhost';
+const DBNAME = 'addressbook';
+const DBUSER = 'root';
+const DBPASS = '';
 
 ?>

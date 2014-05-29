@@ -29,62 +29,58 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+namespace Utils;
+
 require_once dirname(__FILE__) . '/config.php';
 
 /**
- * Collection of convenience methods
+ * Connects to the configured database
+ *
+ * @return object the database handler
  */
-class Utils {
+function connect() {
+  static $dbh = null;
 
-  /**
-   * Connects to the configured database
-   *
-   * @return object the database handler
-   */
-  public static function connect() {
-    static $dbh = null;
+  return $dbh === null
+    ? $dbh = new \PDO('mysql:host=' . \Config\HOST . ';dbname=' . \Config\DBNAME,
+        \Config\DBUSER,
+        \Config\DBPASS)
+    : $dbh;
+}
 
-    return $dbh === null
-      ? $dbh = new PDO('mysql:host=' . Config::HOST . ';dbname=' . Config::DBNAME,
-          Config::DBUSER,
-          Config::DBPASS)
-      : $dbh;
+/**
+ * Binds values with keys listed in $params to PDO statement.
+ * Any param without a corresponding value gets bound as NULL.
+ *
+ * @param object $sth reference to a PDO statement
+ * @param array $params parameters to be bound
+ * @param array $values values with matching param keys
+ */
+function bindSetParams(&$sth, $params, $values) {
+  if (!($sth || $params || $values)) return false;
+
+  array_walk(array_replace(array_fill_keys($params, null), $values),
+    function($value, $key) use ($sth, $params) {
+      if (in_array($key, $params)) $sth->bindParam(":$key", $value);
+    });
+}
+
+/**
+ * Sets appropriate REST response code then outputs json data
+ *
+ * @param object $response the slim app response object
+ * @param mixed $data the data to be output
+ * @return string encoded output data on success, false on failure
+ */
+function restResponse($response, $data) {
+  if ($data === false) $response->setStatus(400);
+  else {
+    if (count($data) === 0) $response->setStatus(404);
+    else $response->setStatus(200);
+    return json_encode($data);
   }
 
-  /**
-   * Binds values with keys listed in $params to PDO statement.
-   * Any param without a corresponding value gets bound as NULL.
-   *
-   * @param object $sth reference to a PDO statement
-   * @param array $params parameters to be bound
-   * @param array $values values with matching param keys
-   */
-  public static function bindSetParams(&$sth, $params, $values) {
-    if (!($sth || $params || $values)) return false;
-
-    array_walk(array_replace(array_fill_keys($params, null), $values),
-      function($value, $key) use ($sth, $params) {
-        if (in_array($key, $params)) $sth->bindParam(":$key", $value);
-      });
-  }
-
-  /**
-   * Sets appropriate REST response code then outputs json data
-   *
-   * @param object $response the slim app response object
-   * @param mixed $data the data to be output
-   * @return string encoded output data on success, false on failure
-   */
-  public static function restResponse($response, $data) {
-    if ($data === false) $response->setStatus(400);
-    else {
-      if (count($data) === 0) $response->setStatus(404);
-      else $response->setStatus(200);
-      return json_encode($data);
-    }
-
-    return false;
-  }
+  return false;
 }
 
 ?>

@@ -59,17 +59,17 @@ $app->get(
   '/user/:uid/contacts',
   function($uid) use ($app) {
     try {
-      $contacts = Contact::getAll($uid);
+      $contacts = \Contact\getAll($uid);
 
       foreach($contacts as $key => $contact) {
-        $groups = Contact::getAttachedGroups($contact['id']);
+        $groups = \Contact\getAttachedGroups($contact['id']);
         $contacts[$key]['groups'] = $groups;
       }
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = Utils::restResponse($app->response, $contacts)) !== false) {
+    if (($output = \Utils\restResponse($app->response, $contacts)) !== false) {
       echo $output;
     }
   }
@@ -84,17 +84,17 @@ $app->get(
   '/user/:uid/contactgroup/:gid/contacts',
   function($uid, $gid) use ($app) {
     try {
-      $contacts = Contact::getContactsByGroup($uid, $gid);
+      $contacts = \Contact\getContactsByGroup($uid, $gid);
 
       foreach($contacts as $key => $contact) {
-        $groups = Contact::getAttachedGroups($contact['id']);
+        $groups = \Contact\getAttachedGroups($contact['id']);
         $contacts[$key]['groups'] = $groups;
       }
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = Utils::restResponse($app->response, $contacts)) !== false) {
+    if (($output = \Utils\restResponse($app->response, $contacts)) !== false) {
       echo $output;
     }
   }
@@ -113,7 +113,7 @@ $app->post(
     $contact['uid'] = $uid;
 
     try {
-      $cid = Contact::saveContact($contact);
+      $cid = \Contact\saveContact($contact);
 
       if ($cid) $app->response->setStatus(201);
       else $app->response->setStatus(400);
@@ -137,7 +137,7 @@ $app->put(
     $contact = $app->request->getBody();
 
     try {
-      $rowCount = Contact::updateContact($uid, $contact);
+      $rowCount = \Contact\updateContact($uid, $contact);
 
       if ($rowCount) $app->response->setStatus(202);
       else $app->response->setStatus(404);
@@ -157,7 +157,7 @@ $app->delete(
   '/user/:uid/contact/:cid',
   function($uid, $cid) use ($app) {
     try {
-      $rowCount = Contact::deleteContact($uid, $cid);
+      $rowCount = \Contact\deleteContact($uid, $cid);
 
       if ($rowCount) $app->response->setStatus(202);
       else $app->response->setStatus(404);

@@ -51,6 +51,9 @@
  * detach a contact group from a users contact
  */
 
+require_once dirname(__FILE__) . '/../utils.php';
+require_once dirname(__FILE__) . '/../models/contactgroup.php';
+
 /**
  * @param int $uid id of logged in user
  * @return array contact group list
@@ -59,19 +62,12 @@ $app->get(
   '/user/:uid/contactgroups',
   function($uid) use ($app) {
     try {
-      $dbh = Utils::connect();
-
-      $sth = $dbh->prepare('select * from contact_groups where uid = :uid order by created desc');
-      $sth->bindParam(':uid', $uid, PDO::PARAM_INT);
-
-      $sth->execute();
-
-      $contactgroups = $sth->fetchAll(PDO::FETCH_ASSOC);
+      $contactgroups = ContactGroup::getAll($uid);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if (($output = Utils::restResponse($app->response, $contactgroups)) !== false) {
+    if (($output = \Utils\restResponse($app->response, $contactgroups)) !== false) {
       echo $output;
     }
   }
@@ -87,23 +83,12 @@ $app->post(
   '/user/:uid/contactgroup',
   function($uid) use ($app) {
     $contactgroup = $app->request->getBody();
-    $contactgroup['uid'] = $uid;
 
     try {
-      $dbh = Utils::connect();
+      $gid = ContactGroup::saveContactGroup($uid, $contactgroup);
 
-      $params = array('uid', 'name');
-
-      $sql = 'insert into contact_groups (' . implode(', ', $params) . ')'
-        . ' values (:' . implode(', :', $params) . ')';
-      $sth = $dbh->prepare($sql);
-
-      Utils::bindSetParams($sth, $params, $contactgroup);
-
-      $sth->execute();
-      $gid = $dbh->lastInsertId();
-
-      $app->response->setStatus(201);
+      if ($gid) $app->response->setStatus(201);
+      else $app->response->setStatus(400);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
@@ -122,37 +107,18 @@ $app->post(
 $app->post(
   '/user/:uid/contact/:cid/contactgroup',
   function($uid, $cid) use ($app) {
-    $cgid = null;
     $contactgroup = $app->request->getBody();
 
     try {
-      $dbh = Utils::connect();
+      $cgid = ContactGroup::attachGroupToContact($uid, $cid, $contactgroup);
 
-      $sql = 'select id from contact_group_jct where cid = :cid and gid = :gid';
-      $sth = $dbh->prepare($sql);
-      $sth->bindParam(':cid', $cid, PDO::PARAM_INT);
-      $sth->bindParam(':gid', $contactgroup['id'], PDO::PARAM_INT);
-
-      $sth->execute();
-
-      $row = $sth->fetch(PDO::FETCH_ASSOC);
-
-      if ($row === false || count($row) === 0) {
-        $sql = 'insert into contact_group_jct (cid, gid) values (:cid, :gid)';
-        $sth = $dbh->prepare($sql);
-        $sth->bindParam(':cid', $cid, PDO::PARAM_INT);
-        $sth->bindParam(':gid', $contactgroup['id'], PDO::PARAM_INT);
-
-        $sth->execute();
-        $cgid = $dbh->lastInsertId();
-
-        $app->response->setStatus(201);
-      } else $app->response->setStatus(405);
+      if ($cgid) $app->response->setStatus(201);
+      else $app->response->setStatus(405);
     } catch (PDOException $e) {
       $app->halt(500, 'Error: ' . $e->getMessage());
     }
 
-    if ($cgid !== null) echo json_encode(array('id' => $cgid));
+    if ($cgid) echo json_encode(array('id' => $cgid));
   }
 )->conditions(array('uid' => '\d+', 'cid' => '\d+'));
 
@@ -168,14 +134,14 @@ $app->put(
     $contactgroup = $app->request->getBody();
 
     try {
-      $dbh = Utils::connect();
+      $dbh = \Utils\connect();
 
       $params = array('id', 'uid', 'name');
 
       $sql = 'update contact_groups set name = :name where id = :id and uid = :uid';
       $sth = $dbh->prepare($sql);
 
-      Utils::bindSetParams($sth, $params, $contactgroup);
+      \Utils\bindSetParams($sth, $params, $contactgroup);
 
       $sth->execute();
 
@@ -196,7 +162,7 @@ $app->delete(
   '/user/:uid/contactgroup/:gid',
   function($uid, $gid) use ($app) {
     try {
-      $dbh = Utils::connect();
+      $dbh = \Utils\connect();
 
       $sql = 'delete from contact_groups where id = ? and uid = ?';
       $sth = $dbh->prepare($sql);
@@ -221,7 +187,7 @@ $app->delete(
   '/user/:uid/contact/:cid/contactgroup/:gid',
   function($uid, $cid, $gid) use ($app) {
     try {
-      $dbh = Utils::connect();
+      $dbh = \Utils\connect();
 
       $sql = 'delete from contact_group_jct where cid = ? and gid = ?';
       $sth = $dbh->prepare($sql);

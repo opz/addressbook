@@ -43,7 +43,7 @@ $app->get('/', function() use ($app) {
 });
 
 require '../routes/contact.php';
-require '../routes/contactgroups.php';
+require '../routes/contactgroup.php';
 require '../routes/user.php';
 
 $app->run();
